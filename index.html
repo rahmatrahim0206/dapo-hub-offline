@@ -47,6 +47,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Anti-Flash Theme Engine (Dijalankan paling awal untuk mencegah kedipan putih) -->
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+
     <style>
       body { 
         font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -62,9 +74,9 @@
       ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       .dark ::-webkit-scrollbar-thumb { background: #475569; }
       
-      /* Sentuhan Optimal Tablet/Android */
+      /* Sentuhan Optimal Seluler & Tablet (Touch Target > 44px) */
       button, a, select, input {
-        min-height: 40px;
+        min-height: 44px;
         touch-action: manipulation;
       }
 
@@ -86,14 +98,6 @@
   <body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col antialiased">
 
     <!-- ========================================== -->
-    <!-- OFFLINE STATUS ALERT BAR                   -->
-    <!-- ========================================== -->
-    <div id="offline-banner" class="bg-rose-600 text-white text-center py-2 px-4 text-xs font-semibold shadow-md transform -translate-y-full transition-transform duration-300 fixed top-0 left-0 right-0 z-50 flex items-center justify-center gap-2">
-      <i class="fa-solid fa-cloud-arrow-down animate-bounce"></i>
-      <span>Koneksi internet terputus. Mode Luring Aktif. Anda tetap bisa menggunakan seluruh fitur portal lokal dengan aman!</span>
-    </div>
-
-    <!-- ========================================== -->
     <!-- NAVIGATION HEADER                          -->
     <!-- ========================================== -->
     <header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-all">
@@ -102,7 +106,7 @@
           
           <!-- Logo & Status Jaringan -->
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold font-header text-base shadow-md shadow-sky-500/20">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold font-header text-base shadow-md shadow-sky-500/20 shrink-0">
               DH
             </div>
             <div>
@@ -110,40 +114,40 @@
                 <h1 class="font-header text-base sm:text-lg font-bold tracking-tight bg-gradient-to-r from-sky-500 to-indigo-600 dark:from-sky-400 dark:to-indigo-400 bg-clip-text text-transparent">
                   DAPO-HUB
                 </h1>
-                <div id="network-status-indicator" class="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300 select-none">
+                <div id="network-status-indicator" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300 select-none shrink-0">
                   <span class="relative flex h-1.5 w-1.5">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                   </span>
-                  <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">Online</span>
+                  <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">Online</span>
                 </div>
               </div>
-              <p class="text-[10px] text-slate-400 dark:text-slate-500 -mt-0.5 font-medium">Portal Integrasi Operator</p>
+              <p class="text-[10px] text-slate-400 dark:text-slate-500 -mt-0.5 font-semibold">Portal Integrasi Operator</p>
             </div>
           </div>
 
           <!-- Aksi Cepat Menu Utama -->
           <div class="flex items-center space-x-1 sm:space-x-2">
             <button onclick="openConfigModal()" title="Atur Profil & Pengunci" class="p-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm flex items-center justify-center" aria-label="Profil & Pengunci">
-              <i class="fa-solid fa-school-flag"></i>
+              <i class="fa-solid fa-school-flag text-base"></i>
             </button>
             <button onclick="openLinkManagerModal()" title="Kelola Tautan" class="p-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm relative flex items-center justify-center" aria-label="Kelola Tautan">
-              <i class="fa-solid fa-link"></i>
+              <i class="fa-solid fa-link text-base"></i>
               <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full animate-ping"></span>
             </button>
             <button onclick="openBackupModal()" title="Cadangkan & Pulihkan" class="p-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm flex items-center justify-center" aria-label="Cadangkan & Pulihkan">
-              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <i class="fa-solid fa-cloud-arrow-up text-base"></i>
             </button>
             <button onclick="lockSessionManual()" title="Kunci Sesi" class="p-2.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm flex items-center justify-center" aria-label="Kunci Sesi">
-              <i class="fa-solid fa-lock"></i>
+              <i class="fa-solid fa-lock text-base"></i>
             </button>
-            <button id="pwa-install-btn" onclick="installPWA()" title="Pasang Aplikasi (PWA)" class="hidden p-2 rounded-lg bg-sky-500 text-white hover:bg-sky-600 transition-colors text-xs sm:text-sm flex items-center space-x-1 font-semibold animate-pulse">
-              <i class="fa-solid fa-circle-down"></i> <span class="hidden md:inline text-[10px]">Pasang</span>
+            <button id="pwa-install-btn" onclick="installPWA()" title="Pasang Aplikasi (PWA)" class="hidden p-2.5 rounded-lg bg-sky-500 text-white hover:bg-sky-600 transition-colors text-xs sm:text-sm flex items-center space-x-1.5 font-bold animate-pulse">
+              <i class="fa-solid fa-circle-down"></i> <span class="hidden md:inline text-xs">Pasang Aplikasi</span>
             </button>
             <div class="h-6 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
             <button onclick="toggleTheme()" class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800 text-amber-500 dark:text-sky-400 border border-slate-200 dark:border-slate-700 hover:scale-105 active:scale-95 transition-all text-sm flex items-center justify-center" aria-label="Toggle Tema">
-              <i class="fa-solid fa-sun dark:hidden"></i>
-              <i class="fa-solid fa-moon hidden dark:block"></i>
+              <i class="fa-solid fa-sun dark:hidden text-base"></i>
+              <i class="fa-solid fa-moon hidden dark:block text-base"></i>
             </button>
           </div>
         </div>
@@ -153,7 +157,7 @@
     <!-- ========================================== -->
     <!-- TAMPILAN KONTEN UTAMA                      -->
     <!-- ========================================== -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       
       <!-- SISI KIRI (SIDEBAR UTAS) - 3 KOLOM -->
       <aside class="lg:col-span-3 space-y-4">
@@ -166,11 +170,11 @@
               <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <div class="flex-grow min-w-0">
-              <h2 id="view-school-name" class="font-header text-sm sm:text-base font-bold truncate text-slate-800 dark:text-slate-100">-</h2>
-              <p id="view-school-npsn" class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">NPSN: -</p>
-              <div class="flex flex-wrap gap-1 mt-2">
-                <span id="view-school-status" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">-</span>
-                <span id="view-school-ops" class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400 border border-sky-100 dark:border-sky-900/30 truncate max-w-[130px]">Ops: -</span>
+              <h2 id="view-school-name" class="font-header text-base font-bold truncate text-slate-800 dark:text-slate-100">-</h2>
+              <p id="view-school-npsn" class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5 font-bold">NPSN: -</p>
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <span id="view-school-status" class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">-</span>
+                <span id="view-school-ops" class="px-2 py-0.5 rounded text-xs font-bold bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400 border border-sky-100 dark:border-sky-900/30 truncate max-w-[130px]">Ops: -</span>
               </div>
             </div>
           </div>
@@ -181,14 +185,14 @@
           <h3 class="font-header text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 mb-2.5">
             <i class="fa-solid fa-microchip text-indigo-500 text-sm"></i> Dasbor Status IT Lokal
           </h3>
-          <div class="grid grid-cols-2 gap-2.5 text-[11px]">
-            <div class="bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded border border-slate-100 dark:border-slate-800/80">
-              <span class="text-slate-400 block text-[10px]">Penyimpanan</span>
+          <div class="grid grid-cols-2 gap-2.5 text-xs">
+            <div class="bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded border border-slate-100 dark:border-slate-800/80 text-left">
+              <span class="text-slate-400 block text-xs font-medium">Penyimpanan</span>
               <span id="storage-utilization-text" class="font-bold font-mono text-slate-700 dark:text-slate-200">~0.0 KB</span>
             </div>
-            <div class="bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded border border-slate-100 dark:border-slate-800/80">
-              <span class="text-slate-400 block text-[10px]">Keamanan Sesi</span>
-              <span class="font-bold text-emerald-500 flex items-center gap-1"><i class="fa-solid fa-shield-halved text-[9px]"></i> Aman</span>
+            <div class="bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded border border-slate-100 dark:border-slate-800/80 text-left">
+              <span class="text-slate-400 block text-xs font-medium">Keamanan Sesi</span>
+              <span class="font-bold text-emerald-500 flex items-center gap-1"><i class="fa-solid fa-shield-halved text-xs"></i> Aman</span>
             </div>
           </div>
         </section>
@@ -200,39 +204,39 @@
               <i class="fa-regular fa-calendar-check text-sky-500 text-sm"></i> Kalender Kerja
             </h3>
             <div class="flex items-center space-x-1">
-              <button onclick="prevMonth()" class="p-1 px-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors" aria-label="Bulan Sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+              <button onclick="prevMonth()" class="p-1 px-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors flex items-center" aria-label="Bulan Sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
               <span id="calendar-month-year" class="text-xs font-bold font-mono text-slate-600 dark:text-slate-400 px-1">-</span>
-              <button onclick="nextMonth()" class="p-1 px-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors" aria-label="Bulan Berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+              <button onclick="nextMonth()" class="p-1 px-2.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs transition-colors flex items-center" aria-label="Bulan Berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
           </div>
-          <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-slate-400 mb-1">
+          <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-slate-400 mb-1.5">
             <div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div><div>Min</div>
           </div>
-          <div id="calendar-days" class="grid grid-cols-7 gap-1 text-[11px] font-medium"></div>
+          <div id="calendar-days" class="grid grid-cols-7 gap-1 text-xs font-bold"></div>
 
-          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700">
+          <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-700 text-left">
             <div class="flex items-center justify-between mb-1.5">
-              <span id="selected-date-label" class="text-[11px] font-bold text-indigo-500 dark:text-indigo-400">Catatan Tanggal: -</span>
+              <span id="selected-date-label" class="text-xs font-bold text-indigo-500 dark:text-indigo-400">Catatan Tanggal: -</span>
             </div>
             <div class="flex space-x-1.5 mb-2">
               <input type="text" id="memo-input" placeholder="Tambah catatan cepat..." class="flex-grow px-2.5 py-1.5 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-sky-500 text-slate-700 dark:text-slate-200" />
-              <button onclick="addMemoItem()" class="px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded text-xs transition-all font-semibold flex items-center justify-center">Simpan</button>
+              <button onclick="addMemoItem()" class="px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded text-xs transition-all font-bold flex items-center justify-center">Simpan</button>
             </div>
-            <div id="memo-list" class="space-y-1 max-h-28 overflow-y-auto pr-1"></div>
+            <div id="memo-list" class="space-y-1 max-h-32 overflow-y-auto pr-1"></div>
           </div>
         </section>
 
         <!-- AGENDA UTAMA & SINKRONISASI -->
-        <section class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm transition-all">
+        <section class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm transition-all text-left">
           <div class="flex items-center justify-between mb-3">
             <h3 class="font-header text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <i class="fa-solid fa-list-check text-indigo-500 text-sm"></i> Tugas & Sinkronisasi
             </h3>
-            <span class="text-[10px] text-slate-400 dark:text-slate-500">Tugas Rutin</span>
+            <span class="text-xs text-slate-400 dark:text-slate-500 font-semibold">Tugas Rutin</span>
           </div>
           <form onsubmit="event.preventDefault(); addAgendaItem();" class="flex gap-1.5 mb-3">
             <input type="text" id="agenda-input" placeholder="Contoh: Sinkron Dapodik Paud..." required class="flex-grow px-2.5 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-700 dark:text-slate-200" />
-            <button type="submit" class="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-xs transition-colors flex items-center justify-center min-w-[40px]" aria-label="Tambah Agenda"><i class="fa-solid fa-plus text-sm"></i></button>
+            <button type="submit" class="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-xs transition-colors flex items-center justify-center min-w-[40px]" aria-label="Tambah Agenda"><i class="fa-solid fa-plus text-base"></i></button>
           </form>
           <div id="agenda-list" class="space-y-1.5 max-h-52 overflow-y-auto pr-1"></div>
         </section>
@@ -245,10 +249,10 @@
         <!-- HEADER UTAMA JUMBOTRON -->
         <div class="bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 rounded-xl p-6 text-white shadow-md relative overflow-hidden">
           <div class="absolute right-0 top-0 opacity-10 text-9xl -mr-6 -mt-4"><i class="fa-solid fa-network-wired"></i></div>
-          <div class="relative z-10 max-w-3xl">
-            <h2 class="font-header text-base sm:text-2xl font-bold">Portal Integrasi Layanan IT & Dapodik</h2>
-            <p class="text-xs sm:text-sm text-sky-100 mt-2 leading-relaxed">
-              Akses cepat ke seluruh aplikasi pengelolaan sekolah, verifikasi data PTK/PD, laporan keuangan, dan alat bantu utilitas IT dalam satu ekosistem terpadu. Dukungan penuh mode offline (luring) melalui integrasi Progressive Web Apps (PWA).
+          <div class="relative z-10 max-w-3xl text-left">
+            <h2 class="font-header text-lg sm:text-2xl font-bold">Portal Integrasi Layanan IT & Dapodik</h2>
+            <p class="text-xs sm:text-sm text-sky-100 mt-2 leading-relaxed font-medium">
+              Akses cepat ke seluruh aplikasi pengelolaan sekolah, verifikasi data PTK/PD, laporan keuangan, dan alat bantu utilitas IT dalam satu ekosistem terpadu.
             </p>
           </div>
         </div>
@@ -264,7 +268,7 @@
               id="instant-search-input" 
               placeholder="Cari tautan portal secara instan..." 
               oninput="searchLinksInstant()"
-              class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-3 pr-10 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-semibold text-[13px]"
+              class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg py-2.5 pl-3 pr-10 text-xs sm:text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-semibold"
             />
             <button id="clear-search-btn" onclick="clearSearch()" type="button" title="Bersihkan Pencarian" class="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hidden transition-colors">
               <i class="fa-solid fa-circle-xmark text-lg"></i>
@@ -276,10 +280,10 @@
         <div id="portal-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"></div>
 
         <!-- INFORMASI PERINGATAN / TIPS -->
-        <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 rounded-xl p-4 flex items-start gap-3">
-          <span class="text-amber-500 text-sm mt-0.5"><i class="fa-solid fa-triangle-exclamation animate-pulse"></i></span>
-          <div class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-            <strong>Tips PWA Offline:</strong> Portal ini didesain agar dapat diakses sepenuhnya tanpa koneksi internet. Aktifkan fitur *standalone* dengan mengeklik tombol <span class="font-bold underline cursor-pointer" onclick="openConfigModal()"><i class="fa-solid fa-school-flag"></i> Konfigurasi Keamanan</span> untuk menyalin kode Service Worker ke direktori lokal Anda.
+        <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/30 rounded-xl p-4 flex items-start gap-3 text-left">
+          <span class="text-amber-500 text-base mt-0.5"><i class="fa-solid fa-mobile-screen-button animate-pulse"></i></span>
+          <div class="text-xs sm:text-sm text-amber-800 dark:text-amber-300 leading-relaxed font-semibold">
+            <strong>Kenyamanan Penggunaan Seluler & Laptop:</strong> Portal ini didesain luring penuh. Jika Anda menggunakan laptop dan tombol <b>"Pasang Aplikasi"</b> belum aktif di atas, Anda dapat mengeklik ikon instalasi <i class="fa-solid fa-plus-square"></i> langsung di ujung kanan kolom alamat (Address Bar) peramban Google Chrome / Microsoft Edge Anda.
           </div>
         </div>
 
@@ -287,10 +291,10 @@
     </main>
 
     <!-- FOOTER HALAMAN -->
-    <footer class="mt-auto border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 py-5 text-center text-[10px] text-slate-400 dark:text-slate-500 select-none pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)]">
+    <footer class="mt-auto border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 py-5 text-center text-xs text-slate-400 dark:text-slate-500 select-none pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)]">
       <div class="max-w-7xl mx-auto px-4">
-        <p class="font-medium">&copy; 2026 DAPO-HUB. <span id="app-developer-integrity" class="text-sky-500 dark:text-sky-400 font-bold transition-all ml-1"></span></p>
-        <p class="mt-1">Seluruh data disimpan secara lokal di peramban Anda untuk keamanan penuh. Dukungan instalan mandiri (PWA) diaktifkan.</p>
+        <p class="font-bold">&copy; 2026 DAPO-HUB. <span id="app-developer-integrity" class="text-sky-500 dark:text-sky-400 font-bold transition-all ml-1"></span></p>
+        <p class="mt-1 text-[11px] font-medium">Seluruh data disimpan secara lokal di peramban Anda untuk keamanan penuh. Dukungan instalan mandiri (PWA) diaktifkan.</p>
       </div>
     </footer>
 
@@ -305,23 +309,23 @@
           <div class="flex items-center space-x-2"><i class="fa-solid fa-link text-sm"></i><h3 class="font-header text-xs font-bold tracking-wide">Pengelola Tautan Portal</h3></div>
           <button onclick="closeLinkManagerModal()" class="text-white/80 hover:text-white transition-colors p-1" aria-label="Close modal"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
-        <div class="p-4 space-y-4 max-h-[80vh] overflow-y-auto">
+        <div class="p-4 space-y-4 max-h-[80vh] overflow-y-auto text-left">
           <!-- Form Tambah -->
           <div class="border border-slate-100 dark:border-slate-700 rounded-lg p-3.5 bg-slate-50/50 dark:bg-slate-900/30">
             <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 pb-2 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-plus text-sky-500"></i> Buat Tautan Baru</h4>
             <form onsubmit="event.preventDefault(); saveCustomLink();" class="space-y-3.5">
               <div>
-                <label for="link-name-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">NAMA TAUTAN</label>
+                <label for="link-name-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">NAMA TAUTAN</label>
                 <input type="text" id="link-name-input" required class="w-full px-2.5 py-2 text-xs rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500" />
               </div>
               <div>
-                <label for="link-url-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">ALAMAT URL</label>
+                <label for="link-url-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">ALAMAT URL</label>
                 <input type="url" id="link-url-input" required class="w-full px-2.5 py-2 text-xs rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500" />
               </div>
-              <div class="grid grid-cols-2 gap-2">
+              <div class="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label for="link-category-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">SIMPAN DI BAGIAN</label>
-                  <select id="link-category-input" class="w-full px-2 py-2 text-xs rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-semibold text-[11px]">
+                  <label for="link-category-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">SIMPAN DI BAGIAN</label>
+                  <select id="link-category-input" class="w-full px-2 py-2 text-xs rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-bold">
                     <option value="utama">Dapodik & Portal Utama</option>
                     <option value="verval">Verval & Validasi Data</option>
                     <option value="keuangan">Laporan Keuangan & BOSP</option>
@@ -333,8 +337,8 @@
                   </select>
                 </div>
                 <div>
-                  <label for="link-icon-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">IKON TAMPILAN</label>
-                  <select id="link-icon-input" class="w-full px-2 py-2 text-xs rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 text-[11px]">
+                  <label for="link-icon-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">IKON TAMPILAN</label>
+                  <select id="link-icon-input" class="w-full px-2 py-2 text-xs rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-bold">
                     <option value="fa-link">🔗 Link Umum</option>
                     <option value="fa-school">🏫 Sekolah</option>
                     <option value="fa-key">🔑 Akses Masuk</option>
@@ -353,7 +357,7 @@
           </div>
           <!-- Daftar Penghapusan Link Kustom -->
           <div class="border border-slate-100 dark:border-slate-700 rounded-lg p-3.5 bg-slate-50/50 dark:bg-slate-900/30">
-            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 pb-2 mb-3 flex items-center justify-between"><span class="flex items-center gap-1.5"><i class="fa-solid fa-trash-can text-rose-500"></i> Hapus Tautan Kustom</span><span class="text-[10px] text-slate-400 font-normal">Memerlukan Konfirmasi</span></h4>
+            <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 pb-2 mb-3 flex items-center justify-between"><span class="flex items-center gap-1.5"><i class="fa-solid fa-trash-can text-rose-500"></i> Hapus Tautan Kustom</span><span class="text-xs text-slate-400 font-normal">Memerlukan Konfirmasi</span></h4>
             <div id="custom-links-manager-list" class="space-y-1.5 max-h-40 overflow-y-auto pr-1"></div>
           </div>
           <!-- Atur Ulang -->
@@ -369,7 +373,7 @@
       <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4 transform scale-95 transition-transform duration-300 text-center">
         <div class="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-500 flex items-center justify-center mx-auto text-sm mb-3"><i class="fa-solid fa-circle-exclamation animate-pulse text-base"></i></div>
         <h3 class="font-header text-xs font-bold text-slate-800 dark:text-slate-100 mb-1.5">Konfirmasi Penghapusan</h3>
-        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Apakah Anda yakin ingin menghapus tautan kustom <span id="confirm-target-name" class="font-bold text-slate-700 dark:text-slate-200"></span>?</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Apakah Anda yakin ingin menghapus tautan kustom <span id="confirm-target-name" class="font-bold text-slate-700 dark:text-slate-200"></span>?</p>
         <div class="flex space-x-2">
           <button onclick="closeDeleteConfirmModal()" class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded text-xs font-semibold transition-all">Batal</button>
           <button id="confirm-delete-btn" class="flex-1 py-2 px-3 bg-rose-500 hover:bg-rose-600 text-white rounded text-xs font-semibold transition-all">Ya, Hapus</button>
@@ -382,17 +386,17 @@
       <div class="bg-white dark:bg-slate-800 w-full max-w-xs rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 p-4 transform scale-95 transition-transform duration-300 text-center">
         <div class="w-10 h-10 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-500 flex items-center justify-center mx-auto text-sm mb-3"><i class="fa-solid fa-rotate-left animate-spin text-base"></i></div>
         <h3 class="font-header text-xs font-bold text-slate-800 dark:text-slate-100 mb-1.5">Atur Ulang Tautan?</h3>
-        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Apakah Anda yakin ingin mengatur ulang daftar tautan ke pengaturan default? Tautan kustom Anda akan tetap dipertahankan.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">Apakah Anda yakin ingin mengatur ulang ke setelan default? Seluruh tautan kustom yang pernah Anda buat akan terhapus.</p>
         <div class="flex space-x-2">
           <button onclick="closeResetConfirmModal()" class="flex-1 py-2 px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded text-xs font-semibold transition-all">Batal</button>
-          <button onclick="executeResetDefaultLinks()" class="flex-1 py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white rounded text-xs font-semibold transition-all">Ya, Lanjutkan</button>
+          <button onclick="executeResetDefaultLinks()" class="flex-1 py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white rounded text-xs font-semibold transition-all">Ya, Bersihkan</button>
         </div>
       </div>
     </div>
 
     <!-- MODAL: PROFILE SEKOLAH & AUTO LOCK PIN -->
     <div id="configModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true">
-      <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden transform scale-95 transition-transform duration-300">
+      <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden transform scale-95 transition-transform duration-300 text-left">
         <div class="bg-gradient-to-r from-sky-500 to-indigo-600 p-3.5 flex items-center justify-between text-white">
           <div class="flex items-center space-x-2"><i class="fa-solid fa-school-flag text-sm"></i><h3 class="font-header text-xs font-bold">Profil Sekolah & Keamanan</h3></div>
           <button onclick="closeConfigModal()" class="text-white/80 hover:text-white transition-colors p-1" aria-label="Close modal"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -400,16 +404,16 @@
         <div class="p-4 space-y-3.5 max-h-[75vh] overflow-y-auto">
           <form onsubmit="event.preventDefault(); saveSchoolProfile();" class="space-y-3.5">
             <div>
-              <label for="school-name-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">NAMA SEKOLAH</label>
+              <label for="school-name-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">NAMA SEKOLAH</label>
               <input type="text" id="school-name-input" required class="w-full px-2.5 py-2 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500" />
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label for="school-npsn-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">NPSN</label>
+                <label for="school-npsn-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">NPSN</label>
                 <input type="text" id="school-npsn-input" required class="w-full px-2.5 py-2 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none font-mono focus:ring-1 focus:ring-sky-500" />
               </div>
               <div>
-                <label for="school-status-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">STATUS SEKOLAH</label>
+                <label for="school-status-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">STATUS SEKOLAH</label>
                 <select id="school-status-input" class="w-full px-2 py-2 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500">
                   <option value="Negeri">Negeri</option>
                   <option value="Swasta">Swasta</option>
@@ -417,17 +421,17 @@
               </div>
             </div>
             <div>
-              <label for="school-ops-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">NAMA OPERATOR UTAMA</label>
+              <label for="school-ops-input" class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">NAMA OPERATOR UTAMA</label>
               <input type="text" id="school-ops-input" required class="w-full px-2.5 py-2 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500" />
             </div>
             
             <!-- Konfigurasi Lock Screen Otomatis (Idle Mode) -->
             <div class="border-t border-slate-100 dark:border-slate-700/80 pt-3 space-y-3">
-              <h4 class="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-wide">Pengaturan Pengunci Sesi</h4>
+              <h4 class="text-xs font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-wide">Pengaturan Pengunci Sesi</h4>
               <div class="grid grid-cols-2 gap-2">
                 <div>
-                  <label for="lock-timeout-input" class="block text-[9px] font-bold text-slate-500 dark:text-slate-400 mb-1">BATAS WAKTU (IDLE)</label>
-                  <select id="lock-timeout-input" class="w-full px-2 py-2 text-[11px] rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-medium">
+                  <label for="lock-timeout-input" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">BATAS WAKTU (IDLE)</label>
+                  <select id="lock-timeout-input" class="w-full px-2 py-2 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 font-bold">
                     <option value="0">Nonaktif</option>
                     <option value="1">1 Menit</option>
                     <option value="3">3 Menit</option>
@@ -437,29 +441,29 @@
                   </select>
                 </div>
                 <div>
-                  <label for="lock-pin-setup" class="block text-[9px] font-bold text-slate-500 dark:text-slate-400 mb-1">PIN PENGUNCI</label>
-                  <input type="password" id="lock-pin-setup" placeholder="Bebas / Tanpa PIN" class="w-full px-2.5 py-2 text-[11px] rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 tracking-wider" />
+                  <label for="lock-pin-setup" class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-1">PIN PENGUNCI</label>
+                  <input type="password" id="lock-pin-setup" placeholder="Bebas / Tanpa PIN" class="w-full px-2.5 py-2 text-xs rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 tracking-wider" />
                 </div>
               </div>
             </div>
 
             <!-- INTEGRASI DETEKSI PWA STATUS -->
             <div class="border-t border-slate-100 dark:border-slate-700/80 pt-3 space-y-2">
-              <h4 class="text-[10px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wide flex items-center gap-1.5">
+              <h4 class="text-xs font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wide flex items-center gap-1.5">
                 <i class="fa-solid fa-circle-nodes"></i> Konfigurasi PWA & Offline Engine
               </h4>
               <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-lg border border-slate-100 dark:border-slate-800 space-y-2">
-                <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center justify-between text-xs font-semibold">
                   <span class="text-slate-400">Offline Manifest:</span>
-                  <span class="font-bold text-emerald-500 flex items-center gap-1"><i class="fa-solid fa-circle-check text-[10px]"></i> Aktif (Inline)</span>
+                  <span class="text-emerald-500 flex items-center gap-1"><i class="fa-solid fa-circle-check text-xs"></i> Aktif (Inline)</span>
                 </div>
-                <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center justify-between text-xs font-semibold">
                   <span class="text-slate-400">Service Worker status:</span>
-                  <span id="pwa-sw-status" class="font-bold text-amber-500 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-[10px]"></i> Mendeteksi...</span>
+                  <span id="pwa-sw-status" class="text-amber-500 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-xs"></i> Mendeteksi...</span>
                 </div>
                 <div id="sw-generation-zone" class="hidden pt-1">
-                  <p class="text-[10px] text-slate-400 leading-normal mb-2">Untuk mengaktifkan luring penuh tanpa server (PWA), salin kode pengontrol luring dan simpan sebagai file <code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-indigo-500">sw.js</code> di folder yang sama.</p>
-                  <button type="button" onclick="copyServiceWorkerCode()" class="w-full py-1.5 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 dark:text-indigo-300 rounded border border-indigo-100 dark:border-indigo-900/30 text-[10px] font-bold hover:bg-indigo-100 dark:hover:bg-indigo-950/80 transition-colors flex items-center justify-center gap-1.5">
+                  <p class="text-xs text-slate-400 leading-normal mb-2">Untuk mengaktifkan luring penuh tanpa server (PWA), salin kode pengontrol luring dan simpan sebagai file <code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-indigo-500 font-bold">sw.js</code> di folder yang sama.</p>
+                  <button type="button" onclick="copyServiceWorkerCode()" class="w-full py-1.5 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-500 dark:text-indigo-300 rounded border border-indigo-100 dark:border-indigo-900/30 text-xs font-bold hover:bg-indigo-100 dark:hover:bg-indigo-950/80 transition-colors flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-copy"></i> Salin Kode sw.js Otomatis
                   </button>
                 </div>
@@ -474,13 +478,13 @@
 
     <!-- MODAL: BACKUP & RESTORE DATA -->
     <div id="backupModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-900/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true">
-      <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden transform scale-95 transition-transform duration-300">
+      <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden transform scale-95 transition-transform duration-300 text-left">
         <div class="bg-gradient-to-r from-sky-500 to-indigo-600 p-3.5 flex items-center justify-between text-white">
           <div class="flex items-center space-x-2"><i class="fa-solid fa-cloud-arrow-up text-sm"></i><h3 class="font-header text-xs font-bold">Cadangkan & Pulihkan</h3></div>
           <button onclick="closeBackupModal()" class="text-white/80 hover:text-white transition-colors p-1" aria-label="Close modal"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
         <div class="p-4 space-y-4">
-          <div class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">Cadangkan seluruh konfigurasi profil, tugas, kalender, dan tautan kustom lokal Anda.</div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">Cadangkan seluruh konfigurasi profil, tugas, kalender, dan tautan kustom lokal Anda.</div>
           <!-- Ekspor -->
           <div class="border border-slate-100 dark:border-slate-700 p-3 rounded-lg bg-slate-50/50 dark:bg-slate-900/30">
             <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">1. Ekspor Cadangan</h4>
@@ -506,7 +510,7 @@
         </div>
         <div class="space-y-1.5">
           <h3 class="text-white font-header font-bold text-sm">Sesi Kerja Terkunci</h3>
-          <p class="text-[11px] text-slate-400 leading-relaxed max-w-xs mx-auto">Portal dikunci sementara demi keamanan data karena sistem tidak mendeteksi aktivitas.</p>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto font-medium">Portal dikunci sementara demi keamanan data karena sistem tidak mendeteksi aktivitas.</p>
         </div>
         <div id="lock-pin-input-container" class="hidden max-w-[200px] mx-auto">
           <input type="password" id="lock-pin-input" placeholder="PIN Pengunci" maxlength="10" class="w-full px-3 py-2 text-center text-xs rounded bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono tracking-widest text-sm" />
@@ -658,7 +662,7 @@
         const container = document.getElementById('toast-container');
         if (!container) return;
         const toast = document.createElement('div');
-        toast.className = 'px-4 py-3 bg-slate-900/95 dark:bg-white/95 text-white dark:text-slate-900 text-xs rounded-xl shadow-xl flex items-center gap-2.5 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 font-semibold max-w-[280px] sm:max-w-xs';
+        toast.className = 'px-4 py-3 bg-slate-900/95 dark:bg-white/95 text-white dark:text-slate-900 text-xs sm:text-sm rounded-xl shadow-xl flex items-center gap-2.5 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 font-bold max-w-[280px] sm:max-w-xs';
         toast.innerHTML = `<i class="fa-solid fa-circle-check text-sky-500 dark:text-sky-600"></i><span class="truncate leading-tight">${message}</span>`;
         container.appendChild(toast);
         setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
@@ -727,7 +731,7 @@
             matchCount += (filteredDefault.length + filteredCustom.length);
 
             const catCard = document.createElement('div');
-            catCard.className = 'bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm transition-all flex flex-col justify-start w-full';
+            catCard.className = 'bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700/60 shadow-sm transition-all flex flex-col justify-start w-full text-left';
 
             const header = document.createElement('div');
             header.className = `flex items-center space-x-2.5 border-b border-slate-100 dark:border-slate-700 pb-2.5 mb-3`;
@@ -735,7 +739,7 @@
               <div class="w-7 h-7 rounded-lg ${colors.bg} ${colors.text} flex items-center justify-center text-xs">
                 <i class="fa-solid ${config.icon}"></i>
               </div>
-              <h3 class="font-header text-sm font-bold text-slate-700 dark:text-slate-300">${config.title}</h3>
+              <h3 class="font-header text-sm sm:text-base font-bold text-slate-700 dark:text-slate-300">${config.title}</h3>
             `;
             catCard.appendChild(header);
 
@@ -756,8 +760,8 @@
               <div class="w-12 h-12 bg-rose-50 dark:bg-rose-950/30 text-rose-500 rounded-full flex items-center justify-center mx-auto text-lg mb-3">
                 <i class="fa-solid fa-unlink"></i>
               </div>
-              <h4 class="font-header font-bold text-xs text-slate-700 dark:text-slate-300">Tautan Tidak Ditemukan</h4>
-              <p class="text-[11px] text-slate-400 mt-1">Tidak ada tautan bawaan maupun kustom yang cocok dengan pencarian Anda.</p>
+              <h4 class="font-header font-bold text-sm text-slate-700 dark:text-slate-300">Tautan Tidak Ditemukan</h4>
+              <p class="text-xs text-slate-400 mt-1">Tidak ada tautan bawaan maupun kustom yang cocok dengan pencarian Anda.</p>
             </div>
           `;
         }
@@ -808,20 +812,20 @@
         link.href = item.url;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        link.className = `flex items-center space-x-2.5 p-2 px-2.5 rounded-xl border transition-all text-left group overflow-hidden relative min-h-[46px] ${
+        link.className = `flex items-center space-x-2.5 p-2.5 px-3 rounded-xl border transition-all text-left group overflow-hidden relative min-h-[48px] ${
           isCustom ? 'bg-indigo-50/40 dark:bg-indigo-950/20 border-indigo-100 dark:border-indigo-900/30 hover:bg-indigo-50 dark:hover:bg-indigo-950/40' 
                    : 'bg-slate-50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800 hover:bg-slate-100/80 dark:hover:bg-slate-800'
         }`;
 
         link.innerHTML = `
-          <div class="w-8.5 h-8.5 rounded-lg flex items-center justify-center text-sm shrink-0 ${isCustom ? 'bg-indigo-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover:bg-sky-500 group-hover:text-white transition-colors'}">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center text-base shrink-0 ${isCustom ? 'bg-indigo-500 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 group-hover:bg-sky-500 group-hover:text-white transition-colors'}">
             <i class="fa-solid ${item.icon || 'fa-link'}"></i>
           </div>
           <div class="min-w-0 flex-grow pr-4">
-            <h4 class="text-xs sm:text-[13px] font-bold truncate leading-snug text-slate-700 dark:text-slate-200 group-hover:text-sky-500 transition-colors">${item.name}</h4>
-            <p class="text-[9px] sm:text-[10px] text-slate-400 dark:text-slate-500 truncate leading-none mt-1 font-mono">${item.url.replace(/^https?:\/\/(www\.)?/, '')}</p>
+            <h4 class="text-xs sm:text-sm font-bold truncate leading-snug text-slate-700 dark:text-slate-200 group-hover:text-sky-500 transition-colors">${item.name}</h4>
+            <p class="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 truncate leading-none mt-1.5 font-mono">${item.url.replace(/^https?:\/\/(www\.)?/, '')}</p>
           </div>
-          ${isCustom ? `<span class="absolute top-0 right-0 px-1 py-[1.5px] text-[7px] bg-indigo-500 text-white font-bold rounded-bl uppercase">Custom</span>` : ''}
+          ${isCustom ? `<span class="absolute top-0 right-0 px-1 py-[1.5px] text-[8px] bg-indigo-500 text-white font-bold rounded-bl uppercase">Custom</span>` : ''}
         `;
         return link;
       }
@@ -846,17 +850,17 @@
         const managerList = document.getElementById('custom-links-manager-list');
         if (!managerList) return;
         if (customLinks.length === 0) {
-          managerList.innerHTML = `<div class="text-center py-4 text-[10px] text-slate-400 dark:text-slate-500"><i class="fa-solid fa-unlink text-lg mb-1 block"></i>Belum ada tautan kustom yang ditambahkan.</div>`;
+          managerList.innerHTML = `<div class="text-center py-4 text-xs text-slate-400 dark:text-slate-500"><i class="fa-solid fa-unlink text-lg mb-1 block"></i>Belum ada tautan kustom yang ditambahkan.</div>`;
           return;
         }
         managerList.innerHTML = customLinks.map(item => `
           <div class="flex items-center justify-between p-2 rounded bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-xs gap-2">
-            <div class="min-w-0 flex-grow">
-              <h5 class="font-bold text-[11px] text-slate-700 dark:text-slate-300 truncate">${item.name}</h5>
-              <span class="text-[9px] text-slate-400 dark:text-slate-500 block">Bagian: ${categoryConfig[item.category]?.title || 'Lainnya'}</span>
+            <div class="min-w-0 flex-grow text-left">
+              <h5 class="font-bold text-xs text-slate-700 dark:text-slate-300 truncate">${item.name}</h5>
+              <span class="text-[10px] text-slate-400 dark:text-slate-500 block">Bagian: ${categoryConfig[item.category]?.title || 'Lainnya'}</span>
             </div>
-            <button type="button" onclick="confirmDeleteCustomLink('${item.id}', '${item.name}')" class="p-1 px-2.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-500 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-[10px] font-bold transition-all flex items-center gap-1 shrink-0 border border-rose-100 dark:border-rose-900/30">
-              <i class="fa-solid fa-trash-can text-[10px]"></i> Hapus
+            <button type="button" onclick="confirmDeleteCustomLink('${item.id}', '${item.name}')" class="p-1 px-2.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-500 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-xs font-bold transition-all flex items-center gap-1 shrink-0 border border-rose-100 dark:border-rose-900/30">
+              <i class="fa-solid fa-trash-can text-xs"></i> Hapus
             </button>
           </div>
         `).join('');
@@ -1003,12 +1007,12 @@
         const list = document.getElementById('agenda-list');
         if (!list) return;
         list.innerHTML = agendas.map(item => `
-          <div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transition-all gap-2">
+          <div class="flex items-center justify-between p-2.5 rounded bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 transition-all gap-2">
             <label class="flex items-center space-x-2.5 cursor-pointer flex-grow min-w-0 py-1">
               <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleAgendaStatus('${item.id}')" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-sky-500 focus:ring-sky-500" />
-              <span class="text-[11px] sm:text-xs truncate flex-grow ${item.done ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300 font-medium'}">${item.text}</span>
+              <span class="text-xs sm:text-sm truncate flex-grow text-left ${item.done ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300 font-bold'}">${item.text}</span>
             </label>
-            <button onclick="deleteAgendaItem('${item.id}')" class="text-slate-400 hover:text-rose-500 p-1.5 rounded transition-colors ml-1.5 shrink-0" title="Hapus Tugas"><i class="fa-regular fa-trash-can text-xs"></i></button>
+            <button onclick="deleteAgendaItem('${item.id}')" class="text-slate-400 hover:text-rose-500 p-2 rounded transition-colors ml-1.5 shrink-0" title="Hapus Tugas"><i class="fa-regular fa-trash-can text-sm"></i></button>
           </div>
         `).join('');
       }
@@ -1021,19 +1025,6 @@
         input.value = '';
         renderAgenda();
         showToast('Tugas Baru Ditambahkan!');
-      }
-
-      function toggleAgendaStatus(id) {
-        agendas = agendas.map(item => item.id === id ? { ...item, done: !item.done } : item);
-        localStorage.setItem('dapo_hub_agendas', JSON.stringify(agendas));
-        renderAgenda();
-      }
-
-      function deleteAgendaItem(id) {
-        agendas = agendas.filter(item => item.id !== id);
-        localStorage.setItem('dapo_hub_agendas', JSON.stringify(agendas));
-        renderAgenda();
-        showToast('Tugas Berhasil Dihapus!');
       }
 
       // ==========================================
@@ -1075,9 +1066,9 @@
             bgClass = "border border-indigo-500 text-indigo-500 rounded-lg dark:border-indigo-400 dark:text-indigo-400 font-bold";
           }
 
-          btn.className = `w-full h-8 flex items-center justify-center rounded-lg transition-all font-mono ${bgClass} relative text-xs`;
+          btn.className = `w-full h-9 flex items-center justify-center rounded-lg transition-all font-mono ${bgClass} relative text-xs sm:text-sm font-bold`;
           if (memos[dateStr] && memos[dateStr].length > 0) {
-            btn.innerHTML += `<span class="absolute bottom-1 w-1 h-1 rounded-full ${dateStr === selectedDateStr ? 'bg-white' : 'bg-rose-500'}"></span>`;
+            btn.innerHTML += `<span class="absolute bottom-1 w-1.5 h-1.5 rounded-full ${dateStr === selectedDateStr ? 'bg-white' : 'bg-rose-500'}"></span>`;
           }
           daysContainer.appendChild(btn);
         }
@@ -1089,9 +1080,22 @@
       function selectDate(dateStr) {
         selectedDateStr = dateStr;
         const [y, m, d] = dateStr.split('-');
-        document.getElementById('selected-date-label').textContent = `Catatan Tanggal: ${parseInt(d)} ${monthNames[parseInt(m)-1]} ${y}`;
+        document.getElementById('selected-date-label').textContent = `Catatan Tanggal: ${parseInt(d, 10)} ${monthNames[parseInt(m, 10)-1]} ${y}`;
         renderCalendar();
         renderMemos();
+      }
+
+      function toggleAgendaStatus(id) {
+        agendas = agendas.map(item => item.id === id ? { ...item, done: !item.done } : item);
+        localStorage.setItem('dapo_hub_agendas', JSON.stringify(agendas));
+        renderAgenda();
+      }
+
+      function deleteAgendaItem(id) {
+        agendas = agendas.filter(item => item.id !== id);
+        localStorage.setItem('dapo_hub_agendas', JSON.stringify(agendas));
+        renderAgenda();
+        showToast('Tugas Berhasil Dihapus!');
       }
 
       // ==========================================
@@ -1103,14 +1107,14 @@
         const dayMemos = memos[selectedDateStr] || [];
 
         if (dayMemos.length === 0) {
-          list.innerHTML = '<p class="text-[10px] text-slate-400 text-center py-2">Tidak ada catatan untuk tanggal ini.</p>';
+          list.innerHTML = '<p class="text-xs text-slate-400 text-center py-2 font-semibold">Tidak ada catatan untuk tanggal ini.</p>';
           return;
         }
 
         list.innerHTML = dayMemos.map((text, index) => `
-          <div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[11px] gap-2">
-            <p class="text-slate-600 dark:text-slate-300 truncate flex-grow text-left">${text}</p>
-            <button onclick="deleteMemoItem(${index})" class="text-slate-400 hover:text-rose-500 transition-colors p-1 shrink-0" title="Hapus Catatan"><i class="fa-solid fa-xmark text-xs"></i></button>
+          <div class="flex items-center justify-between p-2.5 rounded bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-xs sm:text-sm gap-2">
+            <p class="text-slate-600 dark:text-slate-300 truncate flex-grow text-left font-semibold">${text}</p>
+            <button onclick="deleteMemoItem(${index})" class="text-slate-400 hover:text-rose-500 transition-colors p-1.5 shrink-0" title="Hapus Catatan"><i class="fa-solid fa-xmark text-sm"></i></button>
           </div>
         `).join('');
       }
@@ -1193,24 +1197,22 @@
       // ==========================================
       function updateOnlineStatus() {
         const indicator = document.getElementById('network-status-indicator');
-        const offlineBanner = document.getElementById('offline-banner');
         if (!indicator) return;
 
         if (navigator.onLine) {
-          indicator.className = "flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300 select-none";
-          indicator.innerHTML = `<span class="relative flex h-1.5 w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span></span><span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">Online</span>`;
-          if (offlineBanner) offlineBanner.classList.add('-translate-y-full');
+          indicator.className = "flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300 select-none shrink-0";
+          indicator.innerHTML = `<span class="relative flex h-1.5 w-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span></span><span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide uppercase">Online</span>`;
+          showToast('Koneksi internet pulih. Portal sinkron.');
         } else {
-          indicator.className = "flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 transition-all duration-300 select-none";
-          indicator.innerHTML = `<span class="relative flex h-1.5 w-1.5"><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-rose-500"></span></span><span class="text-[9px] font-bold text-rose-600 dark:text-rose-400 tracking-wide uppercase">Offline</span>`;
-          if (offlineBanner) offlineBanner.classList.remove('-translate-y-full');
-          showToast('Koneksi internet terputus. Mode Luring Aktif.');
+          indicator.className = "flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 transition-all duration-300 select-none shrink-0";
+          indicator.innerHTML = `<span class="relative flex h-1.5 w-1.5"><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-rose-500"></span></span><span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 tracking-wide uppercase">Offline</span>`;
+          showToast('Koneksi terputus. Mengaktifkan mesin luring penuh!');
         }
       }
       window.addEventListener('online', updateOnlineStatus);
       window.addEventListener('offline', updateOnlineStatus);
 
-      // Web App Manifest Generator (Inline JSON payload)
+      // Web App Manifest Generator (Optimasi PNG & Instalabilitas Laptop)
       function setupPWAInlineManifest() {
         const manifestObj = {
           "short_name": "DAPO-HUB",
@@ -1218,13 +1220,19 @@
           "description": "Portal integrasi layanan administrasi sekolah, Dapodik dan infrastruktur jaringan lokal.",
           "icons": [
             {
-              "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 640 512%22><path fill=%22%230284c7%22 d=%22M128 32C92.7 32 64 60.7 64 96v256h512V96c0-35.3-28.7-64-64-64H128zM19.2 384C8.6 384 0 392.6 0 403.2C0 445.6 34.4 480 76.8 480h486.4c42.4 0 76.8-34.4 76.8-76.8c0-10.6-8.6-19.2-19.2-19.2H19.2z%22/></svg>",
-              "sizes": "192x192 512x512",
-              "type": "image/svg+xml",
-              "purpose": "any maskable"
+              "src": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=192&h=192&fit=crop",
+              "sizes": "192x192",
+              "type": "image/png",
+              "purpose": "any"
+            },
+            {
+              "src": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=512&h=512&fit=crop",
+              "sizes": "512x512",
+              "type": "image/png",
+              "purpose": "any"
             }
           ],
-          "start_url": "./portal_integrasi_operator.html",
+          "start_url": window.location.href,
           "display": "standalone",
           "theme_color": "#0f172a",
           "background_color": "#0f172a",
@@ -1264,17 +1272,27 @@
         });
       }
 
-      // Deteksi & Daftarkan Service Worker
+      // Deteksi & Daftarkan Service Worker (Dilengkapi Protocol Guard)
       function registerServiceWorker() {
         const swStatusEl = document.getElementById('pwa-sw-status');
         const generationZone = document.getElementById('sw-generation-zone');
+
+        // Protocol Guard: Service Worker hanya bisa didaftarkan di server HTTP/HTTPS
+        if (window.location.protocol !== 'http:' && window.location.protocol !== 'https:') {
+          if (swStatusEl) {
+            swStatusEl.className = "font-bold text-amber-500 flex items-center gap-1 text-xs";
+            swStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xs"></i> Mode file:// (Lokal)`;
+          }
+          if (generationZone) generationZone.classList.add('hidden');
+          return;
+        }
 
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('sw.js')
             .then(reg => {
               if (swStatusEl) {
-                swStatusEl.className = "font-bold text-emerald-500 flex items-center gap-1";
-                swStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-[10px]"></i> Aktif & Siaga`;
+                swStatusEl.className = "font-bold text-emerald-500 flex items-center gap-1 text-xs";
+                swStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-xs"></i> Aktif & Siaga`;
               }
               if (generationZone) generationZone.classList.add('hidden');
 
@@ -1291,17 +1309,16 @@
               });
             })
             .catch(err => {
-              // Terjadi jika sw.js belum diletakkan di direktori server lokal
               if (swStatusEl) {
-                swStatusEl.className = "font-bold text-amber-500 flex items-center gap-1";
-                swStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-[10px]"></i> sw.js Tidak Ditemukan`;
+                swStatusEl.className = "font-bold text-amber-500 flex items-center gap-1 text-xs";
+                swStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xs"></i> sw.js Belum Terpasang`;
               }
               if (generationZone) generationZone.classList.remove('hidden');
             });
         } else {
           if (swStatusEl) {
-            swStatusEl.className = "font-bold text-rose-500 flex items-center gap-1";
-            swStatusEl.innerHTML = `<i class="fa-solid fa-circle-xmark text-[10px]"></i> Tidak Didukung Peramban`;
+            swStatusEl.className = "font-bold text-rose-500 flex items-center gap-1 text-xs";
+            swStatusEl.innerHTML = `<i class="fa-solid fa-circle-xmark text-xs"></i> Peramban Tidak Mendukung PWA`;
           }
         }
       }
@@ -1358,13 +1375,11 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  // Hanya tangani skema http/https
   if (!e.request.url.startsWith('http')) return;
 
   e.respondWith(
     caches.match(e.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Stale-While-Revalidate untuk aset CDN / Statis agar performa instan
         fetch(e.request).then((networkResponse) => {
           if (networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => {
@@ -1385,14 +1400,12 @@ self.addEventListener('fetch', (e) => {
         });
         return networkResponse;
       }).catch(() => {
-        // Fallback jika tidak terkoneksi internet dan cache kosong
         return caches.match(OFFLINE_URL);
       });
     })
   );
 });`;
 
-        // Salin ke clipboard menggunakan metode fallback teruji
         const el = document.createElement('textarea');
         el.value = swCode;
         document.body.appendChild(el);
@@ -1484,13 +1497,6 @@ self.addEventListener('fetch', (e) => {
 
       // Bootstrap Inisialisasi
       window.onload = function() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-
         loadProfileData();
         setupPWAInlineManifest();
         
